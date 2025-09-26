@@ -1,0 +1,406 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 10
+      name: "Sustained load"
+    - duration: 30
+      arrivalRate: 20
+      name: "Peak load"
+    - duration: 30
+      arrivalRate: 5
+      name: "Cool down"
+  defaults:
+    headers:
+      Content-Type: 'application/json'
+  variables:
+    baseUrl: 'http://localhost:3000'
+    apiVersion: 'v1'
+
+# =====================================================
+# MESSAGING API LOAD TESTS
+# =====================================================
+scenarios:
+  - name: "Messaging API Load Test"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/messaging"
+          expect:
+            - statusCode: [200, 401]
+            - contentType: json
+      - post:
+          url: "/api/messaging"
+          json:
+            content: "Test message {{ $randomString() }}"
+            threadId: "{{ $randomString() }}"
+            type: "internal"
+          expect:
+            - statusCode: [201, 401, 422]
+            - contentType: json
+      - get:
+          url: "/api/messaging/threads"
+          expect:
+            - statusCode: [200, 401]
+            - contentType: json
+
+  - name: "Networking API Load Test"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/network/recommendations"
+          expect:
+            - statusCode: [200, 401]
+            - contentType: json
+      - get:
+          url: "/api/network/connections"
+          expect:
+            - statusCode: [200, 401]
+            - contentType: json
+      - get:
+          url: "/api/network/search?q={{ $randomString() }}"
+          expect:
+            - statusCode: [200, 401]
+            - contentType: json
+
+  - name: "Authentication Load Test"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/auth/me"
+          expect:
+            - statusCode: [200, 401]
+      - get:
+          url: "/api/health"
+          expect:
+            - statusCode: 200
+            - contentType: json
+
+  - name: "Static Pages Load Test"
+    weight: 10
+    flow:
+      - get:
+          url: "/dashboard/messaging"
+          expect:
+            - statusCode: 200
+            - contentType: html
+      - get:
+          url: "/dashboard/social-network"
+          expect:
+            - statusCode: 200
+            - contentType: html
+
+# =====================================================
+# REAL-TIME MESSAGING LOAD TESTS
+# =====================================================
+  - name: "Real-time Messaging Load Test"
+    weight: 25
+    flow:
+      - websocket:
+          url: "wss://your-domain.com/api/realtime"
+          expect:
+            - event: "connected"
+      - websocket:
+          emit:
+            event: "subscribe"
+            data:
+              channel: "thread:{{ $randomString() }}"
+              userId: "{{ $randomString() }}"
+          expect:
+            - event: "subscribed"
+      - websocket:
+          emit:
+            event: "typing"
+            data:
+              threadId: "{{ $randomString() }}"
+              userId: "{{ $randomString() }}"
+              isTyping: true
+          expect:
+            - event: "typing_indicator"
+      - websocket:
+          emit:
+            event: "message"
+            data:
+              content: "Real-time message {{ $randomString() }}"
+              threadId: "{{ $randomString() }}"
+              userId: "{{ $randomString() }}"
+          expect:
+            - event: "message_sent"
+      - websocket:
+          emit:
+            event: "read_receipt"
+            data:
+              messageId: "{{ $randomString() }}"
+              userId: "{{ $randomString() }}"
+              threadId: "{{ $randomString() }}"
+          expect:
+            - event: "read_receipt_ack"
+
+# =====================================================
+# PUSH NOTIFICATION LOAD TESTS
+# =====================================================
+  - name: "Push Notification Load Test"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/notifications/subscribe"
+          json:
+            endpoint: "https://fcm.googleapis.com/fcm/send/{{ $randomString() }}"
+            keys:
+              p256dh: "{{ $randomString() }}"
+              auth: "{{ $randomString() }}"
+          expect:
+            - statusCode: 201
+      - post:
+          url: "/api/notifications/send"
+          json:
+            userId: "{{ $randomString() }}"
+            title: "Test notification {{ $randomString() }}"
+            body: "Test message {{ $randomString() }}"
+            data:
+              type: "message"
+              threadId: "{{ $randomString() }}"
+          expect:
+            - statusCode: 200
+
+# =====================================================
+# PERFORMANCE MONITORING LOAD TESTS
+# =====================================================
+  - name: "Performance Monitoring Load Test"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/health"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: "status"
+            - hasProperty: "timestamp"
+      - get:
+          url: "/api/monitoring/performance"
+          expect:
+            - statusCode: 200
+            - contentType: json
+      - get:
+          url: "/api/monitoring/security"
+          expect:
+            - statusCode: 200
+            - contentType: json
+
+# =====================================================
+# ERROR HANDLING LOAD TESTS
+# =====================================================
+  - name: "Error Handling Load Test"
+    weight: 5
+    flow:
+      - get:
+          url: "/api/nonexistent"
+          expect:
+            - statusCode: 404
+      - post:
+          url: "/api/messaging"
+          json:
+            invalidField: "{{ $randomString() }}"
+          expect:
+            - statusCode: 400
+      - get:
+          url: "/api/messaging/{{ $randomString() }}"
+          expect:
+            - statusCode: [200, 404]
+
+# =====================================================
+# CONCURRENT USER SIMULATION
+# =====================================================
+  - name: "Concurrent User Simulation"
+    weight: 20
+    flow:
+      - function: "loginUser"
+      - get:
+          url: "/api/messaging"
+          headers:
+            Authorization: "Bearer {{ userToken }}"
+          expect:
+            - statusCode: 200
+      - post:
+          url: "/api/messaging"
+          headers:
+            Authorization: "Bearer {{ userToken }}"
+          json:
+            content: "Message from user {{ userId }}"
+            threadId: "{{ $randomString() }}"
+          expect:
+            - statusCode: 201
+      - function: "simulateUserActivity"
+
+# =====================================================
+# STRESS TESTING
+# =====================================================
+  - name: "Stress Test - High Volume"
+    weight: 15
+    flow:
+      - loop:
+          - post:
+              url: "/api/messaging"
+              json:
+                content: "Stress test message {{ $loopCount }}"
+                threadId: "{{ $randomString() }}"
+              expect:
+                - statusCode: [201, 429]
+          - think: 0.1
+        count: 100
+
+# =====================================================
+# ENDURANCE TESTING
+# =====================================================
+  - name: "Endurance Test - Long Running"
+    weight: 10
+    flow:
+      - loop:
+          - get:
+              url: "/api/messaging"
+              expect:
+                - statusCode: 200
+          - think: 1
+          - post:
+              url: "/api/messaging"
+              json:
+                content: "Endurance test message {{ $loopCount }}"
+                threadId: "{{ $randomString() }}"
+              expect:
+                - statusCode: 201
+          - think: 2
+        count: 50
+
+# =====================================================
+# SECURITY LOAD TESTS
+# =====================================================
+  - name: "Security Load Test"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "admin@example.com"
+            password: "{{ $randomString() }}"
+          expect:
+            - statusCode: 401
+      - get:
+          url: "/api/admin/users"
+          expect:
+            - statusCode: 401
+      - post:
+          url: "/api/messaging"
+          json:
+            content: "{{ $randomString() }}' OR 1=1--"
+            threadId: "{{ $randomString() }}"
+          expect:
+            - statusCode: [201, 400]
+
+# =====================================================
+# CUSTOM FUNCTIONS
+# =====================================================
+functions:
+  loginUser: |
+    function loginUser(requestParams, context, ee, done) {
+      const userId = context.vars.userId || `user_${Math.random().toString(36).substr(2, 9)}`;
+      const userToken = `token_${Math.random().toString(36).substr(2, 9)}`;
+      
+      context.vars.userId = userId;
+      context.vars.userToken = userToken;
+      
+      return done();
+    }
+
+  simulateUserActivity: |
+    function simulateUserActivity(requestParams, context, ee, done) {
+      // Simulate realistic user behavior
+      const activities = [
+        'browsing_messages',
+        'searching_contacts',
+        'updating_profile',
+        'viewing_analytics'
+      ];
+      
+      const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+      context.vars.lastActivity = randomActivity;
+      
+      return done();
+    }
+
+# =====================================================
+# EXPECTATIONS AND ASSERTIONS
+# =====================================================
+expect:
+  - statusCode: [200, 201, 400, 401, 404, 429]
+  - contentType: json
+  - responseTime: 2000
+  - hasProperty: "success"
+  - hasProperty: "data"
+
+# =====================================================
+# METRICS AND REPORTING
+# =====================================================
+metrics:
+  - name: "response_time"
+    type: "histogram"
+    unit: "ms"
+  - name: "requests_per_second"
+    type: "counter"
+    unit: "req/s"
+  - name: "error_rate"
+    type: "rate"
+    unit: "errors/s"
+  - name: "concurrent_users"
+    type: "gauge"
+    unit: "users"
+
+# =====================================================
+# ENVIRONMENT-SPECIFIC CONFIGURATIONS
+# =====================================================
+environments:
+  development:
+    target: 'http://localhost:3000'
+    phases:
+      - duration: 30
+        arrivalRate: 5
+        name: "Dev load test"
+  
+  staging:
+    target: 'https://staging.your-domain.com'
+    phases:
+      - duration: 120
+        arrivalRate: 20
+        name: "Staging load test"
+  
+  production:
+    target: 'https://your-domain.com'
+    phases:
+      - duration: 60
+        arrivalRate: 10
+        name: "Warm up"
+      - duration: 300
+        arrivalRate: 50
+        name: "Sustained load"
+      - duration: 120
+        arrivalRate: 100
+        name: "Peak load"
+      - duration: 60
+        arrivalRate: 10
+        name: "Cool down"
+
+# =====================================================
+# PLUGINS AND EXTENSIONS
+# =====================================================
+plugins:
+  expect: {}
+  metrics-by-endpoint: {}
+  xk6-browser: {}
+  websocket: {}
+  faker: {}
+  random: {}
+  csv: {}
+  json: {}
+  xml: {}

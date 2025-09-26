@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-08-12T15:22:47.774Z",
+  "overallScore": 75,
+  "totalIssues": 7,
+  "riskLevel": "MEDIUM",
+  "categories": [
+    {
+      "name": "Dependencies",
+      "score": 85,
+      "issues": 1
+    },
+    {
+      "name": "Environment",
+      "score": 80,
+      "issues": 1
+    },
+    {
+      "name": "File Permissions",
+      "score": 100,
+      "issues": 0
+    },
+    {
+      "name": "Code Security",
+      "score": 20,
+      "issues": 4
+    },
+    {
+      "name": "Infrastructure",
+      "score": 90,
+      "issues": 1
+    }
+  ],
+  "recommendations": [
+    "Address remaining security issues",
+    "Implement additional security measures",
+    "Monitor for new vulnerabilities",
+    "Schedule regular security reviews"
+  ]
+}

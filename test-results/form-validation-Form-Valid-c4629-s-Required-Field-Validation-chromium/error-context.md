@@ -1,0 +1,598 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - link "Jewelia Home" [ref=e4] [cursor=pointer]:
+      - /url: /dashboard
+      - img [ref=e7] [cursor=pointer]
+      - generic [ref=e11] [cursor=pointer]: Jewelia
+    - generic [ref=e12]:
+      - link "Home" [ref=e13] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e14] [cursor=pointer]
+        - generic [ref=e17] [cursor=pointer]: Home
+      - link "My Network" [ref=e18] [cursor=pointer]:
+        - /url: /dashboard/my-network
+        - img [ref=e19] [cursor=pointer]
+        - generic [ref=e23] [cursor=pointer]: My Network
+      - link "Messages" [ref=e24] [cursor=pointer]:
+        - /url: /dashboard/messages
+        - img [ref=e25] [cursor=pointer]
+        - generic [ref=e27] [cursor=pointer]: Messages
+      - link "Tasks" [ref=e28] [cursor=pointer]:
+        - /url: /dashboard/tasks
+        - img [ref=e29] [cursor=pointer]
+        - generic [ref=e32] [cursor=pointer]: "5"
+        - generic [ref=e33] [cursor=pointer]: Tasks
+      - link "Notifications" [ref=e34] [cursor=pointer]:
+        - /url: /dashboard/notifications
+        - img [ref=e35] [cursor=pointer]
+        - generic [ref=e38] [cursor=pointer]: "3"
+        - generic [ref=e39] [cursor=pointer]: Notifications
+    - generic [ref=e40]:
+      - button "Open search" [ref=e42] [cursor=pointer]:
+        - img [ref=e43] [cursor=pointer]
+      - button "Share or Scan QR" [ref=e46] [cursor=pointer]:
+        - img [ref=e47] [cursor=pointer]
+      - button "U Me" [ref=e53] [cursor=pointer]:
+        - generic [ref=e55] [cursor=pointer]: U
+        - generic [ref=e56] [cursor=pointer]: Me
+  - main [ref=e57]:
+    - generic [ref=e59]:
+      - generic [ref=e60]:
+        - button "Collapse sidebar" [ref=e62] [cursor=pointer]:
+          - img [ref=e63] [cursor=pointer]
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - button "CUSTOMERS & SALES" [ref=e68] [cursor=pointer]:
+              - img [ref=e69] [cursor=pointer]
+              - generic [ref=e74] [cursor=pointer]: CUSTOMERS & SALES
+              - img [ref=e75] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Customers":
+                    - /url: /dashboard/customers
+                    - img
+                    - generic: Customers
+                - listitem:
+                  - link "Orders":
+                    - /url: /dashboard/orders
+                    - img
+                    - generic: Orders
+                - listitem:
+                  - link "Products":
+                    - /url: /dashboard/products
+                    - img
+                    - generic: Products
+                - listitem:
+                  - link "Trade-In":
+                    - /url: /dashboard/trade-ins
+                    - img
+                    - generic: Trade-In
+                - listitem:
+                  - link "Sales Dashboard":
+                    - /url: /dashboard/sales-dashboard
+                    - img
+                    - generic: Sales Dashboard
+          - generic [ref=e77]:
+            - button "INVENTORY" [ref=e78] [cursor=pointer]:
+              - img [ref=e79] [cursor=pointer]
+              - generic [ref=e82] [cursor=pointer]: INVENTORY
+              - img [ref=e83] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Inventory Management":
+                    - /url: /dashboard/inventory-management
+                    - img
+                    - generic: Inventory Management
+                - listitem:
+                  - link "Asset Tracking":
+                    - /url: /dashboard/inventory/asset-tracking
+                    - img
+                    - generic: Asset Tracking
+                - listitem:
+                  - link "Assign Inventory":
+                    - /url: /dashboard/inventory/asset-tracking/assign
+                    - img
+                    - generic: Assign Inventory
+                - listitem:
+                  - link "Check-In / Check-Out":
+                    - /url: /dashboard/inventory/check-in-out
+                    - img
+                    - generic: Check-In / Check-Out
+                - listitem:
+                  - link "Scanner":
+                    - /url: /dashboard/scanner
+                    - img
+                    - generic: Scanner
+          - generic [ref=e85]:
+            - button "PRODUCTION" [ref=e86] [cursor=pointer]:
+              - img [ref=e87] [cursor=pointer]
+              - generic [ref=e91] [cursor=pointer]: PRODUCTION
+              - img [ref=e92] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Production Dashboard":
+                    - /url: /dashboard/production/kanban
+                    - img
+                    - generic: Production Dashboard
+                - listitem:
+                  - link "Batches":
+                    - /url: /dashboard/production/batches
+                    - img
+                    - generic: Batches
+                - listitem:
+                  - link "Schedule":
+                    - /url: /dashboard/production/schedule
+                    - img
+                    - generic: Schedule
+                - listitem:
+                  - link "CAD Files":
+                    - /url: /dashboard/cad
+                    - img
+                    - generic: CAD Files
+                - listitem:
+                  - link "Materials":
+                    - /url: /dashboard/production/materials
+                    - img
+                    - generic: Materials
+                - listitem:
+                  - link "Equipment":
+                    - /url: /dashboard/equipment
+                    - img
+                    - generic: Equipment
+                - listitem:
+                  - link "Time Tracking":
+                    - /url: /dashboard/production/time-tracking
+                    - img
+                    - generic: Time Tracking
+                - listitem:
+                  - link "Quality Control":
+                    - /url: /dashboard/production/quality-control
+                    - img
+                    - generic: Quality Control
+          - generic [ref=e94]:
+            - button "LOGISTICS" [ref=e95] [cursor=pointer]:
+              - img [ref=e96] [cursor=pointer]
+              - generic [ref=e101] [cursor=pointer]: LOGISTICS
+              - img [ref=e102] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Logistics Dashboard":
+                    - /url: /dashboard/logistics
+                    - img
+                    - generic: Logistics Dashboard
+          - generic [ref=e104]:
+            - button "MARKETPLACE" [ref=e105] [cursor=pointer]:
+              - img [ref=e106] [cursor=pointer]
+              - generic [ref=e110] [cursor=pointer]: MARKETPLACE
+              - img [ref=e111] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Marketplace Overview":
+                    - /url: /dashboard/marketplace
+                    - img
+                    - generic: Marketplace Overview
+                - listitem:
+                  - link "My Shared Inventory":
+                    - /url: /dashboard/inventory-sharing
+                    - img
+                    - generic: My Shared Inventory
+                - listitem:
+                  - link "Browse Network Inventory":
+                    - /url: /dashboard/shared-inventory
+                    - img
+                    - generic: Browse Network Inventory
+                - listitem:
+                  - link "Share New Item":
+                    - /url: /dashboard/inventory-sharing/share
+                    - img
+                    - generic: Share New Item
+          - generic [ref=e113]:
+            - button "COMMUNICATIONS" [ref=e114] [cursor=pointer]:
+              - img [ref=e115] [cursor=pointer]
+              - generic [ref=e117] [cursor=pointer]: COMMUNICATIONS
+              - img [ref=e118] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Communications":
+                    - /url: /dashboard/communications
+                    - img
+                    - generic: Communications
+          - generic [ref=e120]:
+            - button "SOCIAL NETWORK" [ref=e121] [cursor=pointer]:
+              - img [ref=e122] [cursor=pointer]
+              - generic [ref=e126] [cursor=pointer]: SOCIAL NETWORK
+              - img [ref=e127] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Social Network":
+                    - /url: /dashboard/social-network
+                    - img
+                    - generic: Social Network
+                - listitem:
+                  - link "Profile Setup":
+                    - /url: /dashboard/profile-setup
+                    - img
+                    - generic: Profile Setup
+                - listitem:
+                  - link "My Network":
+                    - /url: /dashboard/my-network
+                    - img
+                    - generic: My Network
+                - listitem:
+                  - link "Communities":
+                    - /url: /dashboard/communities
+                    - img
+                    - generic: Communities
+                - listitem:
+                  - link "Events":
+                    - /url: /dashboard/events
+                    - img
+                    - generic: Events
+          - generic [ref=e129]:
+            - button "SERVICES" [ref=e130] [cursor=pointer]:
+              - img [ref=e131] [cursor=pointer]
+              - generic [ref=e134] [cursor=pointer]: SERVICES
+              - img [ref=e135] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Consignment Dashboard":
+                    - /url: /dashboard/consignment
+                    - img
+                    - generic: Consignment Dashboard
+                - listitem:
+                  - link "Repairs":
+                    - /url: /dashboard/repairs
+                    - img
+                    - generic: Repairs
+                - listitem:
+                  - link "Rework Tracking":
+                    - /url: /dashboard/services/rework
+                    - img
+                    - generic: Rework Tracking
+          - generic [ref=e137]:
+            - button "FINANCE" [ref=e138] [cursor=pointer]:
+              - img [ref=e139] [cursor=pointer]
+              - generic [ref=e141] [cursor=pointer]: FINANCE
+              - img [ref=e142] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Accounts Receivable":
+                    - /url: /dashboard/accounts-receivable
+                    - img
+                    - generic: Accounts Receivable
+                - listitem:
+                  - link "Accounts Payable":
+                    - /url: /dashboard/accounts-payable
+                    - img
+                    - generic: Accounts Payable
+          - generic [ref=e144]:
+            - button "ANALYTICS" [ref=e145] [cursor=pointer]:
+              - img [ref=e146] [cursor=pointer]
+              - generic [ref=e148] [cursor=pointer]: ANALYTICS
+              - img [ref=e149] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Business Analytics":
+                    - /url: /dashboard/analytics
+                    - img
+                    - generic: Business Analytics
+                - listitem:
+                  - link "Production Analytics":
+                    - /url: /dashboard/production/analytics
+                    - img
+                    - generic: Production Analytics
+                - listitem:
+                  - link "Efficiency Analytics":
+                    - /url: /dashboard/production/efficiency
+                    - img
+                    - generic: Efficiency Analytics
+          - generic [ref=e151]:
+            - button "SETTINGS" [ref=e152] [cursor=pointer]:
+              - img [ref=e153] [cursor=pointer]
+              - generic [ref=e156] [cursor=pointer]: SETTINGS
+              - img [ref=e157] [cursor=pointer]
+            - generic:
+              - list:
+                - listitem:
+                  - link "Access Control":
+                    - /url: /dashboard/access-control
+                    - img
+                    - generic: Access Control
+                - listitem:
+                  - link "Team Management":
+                    - /url: /dashboard/team-management
+                    - img
+                    - generic: Team Management
+                - listitem:
+                  - link "Email Integration":
+                    - /url: /dashboard/email-integration
+                    - img
+                    - generic: Email Integration
+                - listitem:
+                  - link "Resources":
+                    - /url: /dashboard/production/resources
+                    - img
+                    - generic: Resources
+                - listitem:
+                  - link "Billing":
+                    - /url: /dashboard/billing
+                    - img
+                    - generic: Billing
+                - listitem:
+                  - link "System Settings":
+                    - /url: /settings
+                    - img
+                    - generic: System Settings
+      - main [ref=e160]:
+        - main [ref=e163]:
+          - generic [ref=e166]:
+            - heading "Customer Management" [level=1] [ref=e167]
+            - paragraph [ref=e168]: Manage your jewelry customers, track interactions, and analyze customer data
+          - generic [ref=e169]:
+            - generic [ref=e172]:
+              - img [ref=e174]
+              - heading "Customer Management" [level=3] [ref=e177]
+            - generic [ref=e180]:
+              - link "Total Customers Customer 1,247 +89 this month Total number of customers in the system" [ref=e181] [cursor=pointer]:
+                - /url: /dashboard/customers/analytics
+                - generic [ref=e183] [cursor=pointer]:
+                  - generic [ref=e185] [cursor=pointer]:
+                    - img [ref=e187] [cursor=pointer]
+                    - generic [ref=e192] [cursor=pointer]:
+                      - heading "Total Customers" [level=4] [ref=e193] [cursor=pointer]
+                      - generic [ref=e194] [cursor=pointer]: Customer
+                  - generic [ref=e195] [cursor=pointer]:
+                    - generic [ref=e196] [cursor=pointer]: 1,247
+                    - generic [ref=e197] [cursor=pointer]:
+                      - img [ref=e198] [cursor=pointer]
+                      - generic [ref=e201] [cursor=pointer]: +89 this month
+                  - paragraph [ref=e202] [cursor=pointer]: Total number of customers in the system
+              - link "Avg Order Value Financial $2,450 +12.5% from last month Average value per customer order" [ref=e203] [cursor=pointer]:
+                - /url: /dashboard/analytics/revenue
+                - generic [ref=e205] [cursor=pointer]:
+                  - generic [ref=e207] [cursor=pointer]:
+                    - img [ref=e209] [cursor=pointer]
+                    - generic [ref=e211] [cursor=pointer]:
+                      - heading "Avg Order Value" [level=4] [ref=e212] [cursor=pointer]
+                      - generic [ref=e213] [cursor=pointer]: Financial
+                  - generic [ref=e214] [cursor=pointer]:
+                    - generic [ref=e215] [cursor=pointer]: $2,450
+                    - generic [ref=e216] [cursor=pointer]:
+                      - img [ref=e217] [cursor=pointer]
+                      - generic [ref=e220] [cursor=pointer]: +12.5% from last month
+                  - paragraph [ref=e221] [cursor=pointer]: Average value per customer order
+              - link "Retention Rate Customer 87.3% +5.2% from last month Percentage of customers who return" [ref=e222] [cursor=pointer]:
+                - /url: /dashboard/customers/segments
+                - generic [ref=e224] [cursor=pointer]:
+                  - generic [ref=e226] [cursor=pointer]:
+                    - img [ref=e228] [cursor=pointer]
+                    - generic [ref=e230] [cursor=pointer]:
+                      - heading "Retention Rate" [level=4] [ref=e231] [cursor=pointer]
+                      - generic [ref=e232] [cursor=pointer]: Customer
+                  - generic [ref=e233] [cursor=pointer]:
+                    - generic [ref=e234] [cursor=pointer]: 87.3%
+                    - generic [ref=e235] [cursor=pointer]:
+                      - img [ref=e236] [cursor=pointer]
+                      - generic [ref=e239] [cursor=pointer]: +5.2% from last month
+                  - paragraph [ref=e240] [cursor=pointer]: Percentage of customers who return
+          - generic [ref=e241]:
+            - heading "Quick Actions" [level=3] [ref=e243]
+            - generic [ref=e245]:
+              - link "Add Customer" [ref=e246] [cursor=pointer]:
+                - /url: /dashboard/customers/new
+                - button "Add Customer" [active] [ref=e247] [cursor=pointer]:
+                  - img [ref=e249] [cursor=pointer]
+                  - generic [ref=e254] [cursor=pointer]: Add Customer
+              - link "Create Order" [ref=e255] [cursor=pointer]:
+                - /url: /dashboard/orders/create
+                - button "Create Order" [ref=e256] [cursor=pointer]:
+                  - img [ref=e258] [cursor=pointer]
+                  - generic [ref=e262] [cursor=pointer]: Create Order
+              - link "Add Product" [ref=e263] [cursor=pointer]:
+                - /url: /dashboard/products/new
+                - button "Add Product" [ref=e264] [cursor=pointer]:
+                  - img [ref=e266] [cursor=pointer]
+                  - generic [ref=e270] [cursor=pointer]: Add Product
+              - link "Create Quote" [ref=e271] [cursor=pointer]:
+                - /url: /dashboard/quotes/create
+                - button "Create Quote" [ref=e272] [cursor=pointer]:
+                  - img [ref=e274] [cursor=pointer]
+                  - generic [ref=e276] [cursor=pointer]: Create Quote
+          - generic [ref=e280]:
+            - tablist [ref=e281]:
+              - tab "Overview" [selected] [ref=e282] [cursor=pointer]:
+                - img [ref=e284] [cursor=pointer]
+                - text: Overview
+              - tab "Analytics" [ref=e289] [cursor=pointer]:
+                - img [ref=e291] [cursor=pointer]
+                - text: Analytics
+              - tab "Segments" [ref=e293] [cursor=pointer]:
+                - img [ref=e295] [cursor=pointer]
+                - text: Segments
+              - tab "Insights" [ref=e299] [cursor=pointer]:
+                - img [ref=e301] [cursor=pointer]
+                - text: Insights
+            - tabpanel "Overview" [ref=e303]:
+              - generic [ref=e304]:
+                - generic [ref=e305]:
+                  - button "Table View" [ref=e306] [cursor=pointer]
+                  - button "Card View" [ref=e307] [cursor=pointer]
+                - generic [ref=e308]:
+                  - img [ref=e309]
+                  - searchbox "Search customers by name, email, phone, or company..." [ref=e312]
+              - generic [ref=e314]:
+                - generic [ref=e316]:
+                  - button [ref=e317] [cursor=pointer]:
+                    - img [ref=e318] [cursor=pointer]
+                  - button [ref=e323] [cursor=pointer]:
+                    - img [ref=e324] [cursor=pointer]
+                  - button "Bulk Actions (0)" [disabled]:
+                    - img
+                    - text: Bulk Actions (0)
+                - table [ref=e329]:
+                  - rowgroup [ref=e330]:
+                    - row "Customer Company Address Email Phone Actions" [ref=e331]:
+                      - cell [ref=e332]:
+                        - checkbox [ref=e333]
+                      - cell "Customer" [ref=e334] [cursor=pointer]:
+                        - generic [ref=e335] [cursor=pointer]:
+                          - text: Customer
+                          - img [ref=e336] [cursor=pointer]
+                      - cell "Company" [ref=e339] [cursor=pointer]:
+                        - generic [ref=e340] [cursor=pointer]:
+                          - text: Company
+                          - img [ref=e341] [cursor=pointer]
+                      - cell "Address" [ref=e344] [cursor=pointer]:
+                        - generic [ref=e345] [cursor=pointer]:
+                          - text: Address
+                          - img [ref=e346] [cursor=pointer]
+                      - cell "Email" [ref=e349] [cursor=pointer]:
+                        - generic [ref=e350] [cursor=pointer]:
+                          - text: Email
+                          - img [ref=e351] [cursor=pointer]
+                      - cell "Phone" [ref=e354] [cursor=pointer]:
+                        - generic [ref=e355] [cursor=pointer]:
+                          - text: Phone
+                          - img [ref=e356] [cursor=pointer]
+                      - cell "Actions" [ref=e359]
+                  - rowgroup [ref=e360]:
+                    - link "View details for David Thompson" [ref=e361] [cursor=pointer]:
+                      - /url: /dashboard/customers/4
+                      - cell [ref=e362] [cursor=pointer]:
+                        - checkbox [ref=e363]
+                      - 'cell "David Thompson David Thompson ID: 4" [ref=e364] [cursor=pointer]':
+                        - generic [ref=e365] [cursor=pointer]:
+                          - img "David Thompson" [ref=e367] [cursor=pointer]
+                          - generic [ref=e368] [cursor=pointer]:
+                            - generic [ref=e369] [cursor=pointer]: David Thompson
+                            - 'generic "Full ID: 4" [ref=e370] [cursor=pointer]': "ID: 4"
+                      - cell "Wilson Enterprises" [ref=e371] [cursor=pointer]
+                      - cell "321 Elm St, Miami, ..." [ref=e373] [cursor=pointer]:
+                        - generic "321 Elm St, Miami, FL 33101" [ref=e374] [cursor=pointer]: 321 Elm St, Miami, ...
+                      - cell "david.thompson@email.com" [ref=e375] [cursor=pointer]:
+                        - img [ref=e377] [cursor=pointer]
+                      - cell "+1-555-0126" [ref=e381] [cursor=pointer]:
+                        - img [ref=e383] [cursor=pointer]
+                      - cell [ref=e386] [cursor=pointer]:
+                        - button [ref=e387] [cursor=pointer]:
+                          - img [ref=e388] [cursor=pointer]
+                    - link "View details for Emily Rodriguez" [ref=e392] [cursor=pointer]:
+                      - /url: /dashboard/customers/3
+                      - cell [ref=e393] [cursor=pointer]:
+                        - checkbox [ref=e394]
+                      - 'cell "Emily Rodriguez Emily Rodriguez ID: 3" [ref=e395] [cursor=pointer]':
+                        - generic [ref=e396] [cursor=pointer]:
+                          - img "Emily Rodriguez" [ref=e398] [cursor=pointer]
+                          - generic [ref=e399] [cursor=pointer]:
+                            - generic [ref=e400] [cursor=pointer]: Emily Rodriguez
+                            - 'generic "Full ID: 3" [ref=e401] [cursor=pointer]': "ID: 3"
+                      - cell "Davis Consulting" [ref=e402] [cursor=pointer]
+                      - cell "789 Pine St, Chicag..." [ref=e404] [cursor=pointer]:
+                        - generic "789 Pine St, Chicago, IL 60601" [ref=e405] [cursor=pointer]: 789 Pine St, Chicag...
+                      - cell "emily.rodriguez@email.com" [ref=e406] [cursor=pointer]:
+                        - img [ref=e408] [cursor=pointer]
+                      - cell "+1-555-0125" [ref=e412] [cursor=pointer]:
+                        - img [ref=e414] [cursor=pointer]
+                      - cell [ref=e417] [cursor=pointer]:
+                        - button [ref=e418] [cursor=pointer]:
+                          - img [ref=e419] [cursor=pointer]
+                    - link "View details for Lisa Wang" [ref=e423] [cursor=pointer]:
+                      - /url: /dashboard/customers/5
+                      - cell [ref=e424] [cursor=pointer]:
+                        - checkbox [ref=e425]
+                      - 'cell "Lisa Wang Lisa Wang ID: 5" [ref=e426] [cursor=pointer]':
+                        - generic [ref=e427] [cursor=pointer]:
+                          - img "Lisa Wang" [ref=e429] [cursor=pointer]
+                          - generic [ref=e430] [cursor=pointer]:
+                            - generic [ref=e431] [cursor=pointer]: Lisa Wang
+                            - 'generic "Full ID: 5" [ref=e432] [cursor=pointer]': "ID: 5"
+                      - cell "Anderson Manufacturing" [ref=e433] [cursor=pointer]
+                      - cell "654 Maple Dr, Seatt..." [ref=e435] [cursor=pointer]:
+                        - generic "654 Maple Dr, Seattle, WA 98101" [ref=e436] [cursor=pointer]: 654 Maple Dr, Seatt...
+                      - cell "lisa.wang@email.com" [ref=e437] [cursor=pointer]:
+                        - img [ref=e439] [cursor=pointer]
+                      - cell "+1-555-0127" [ref=e443] [cursor=pointer]:
+                        - img [ref=e445] [cursor=pointer]
+                      - cell [ref=e448] [cursor=pointer]:
+                        - button [ref=e449] [cursor=pointer]:
+                          - img [ref=e450] [cursor=pointer]
+                    - link "View details for Michael Chen" [ref=e454] [cursor=pointer]:
+                      - /url: /dashboard/customers/2
+                      - cell [ref=e455] [cursor=pointer]:
+                        - checkbox [ref=e456]
+                      - 'cell "Michael Chen Michael Chen ID: 2" [ref=e457] [cursor=pointer]':
+                        - generic [ref=e458] [cursor=pointer]:
+                          - img "Michael Chen" [ref=e460] [cursor=pointer]
+                          - generic [ref=e461] [cursor=pointer]:
+                            - generic [ref=e462] [cursor=pointer]: Michael Chen
+                            - 'generic "Full ID: 2" [ref=e463] [cursor=pointer]': "ID: 2"
+                      - cell "Chen Technologies" [ref=e464] [cursor=pointer]
+                      - cell "456 Oak Ave, Los An..." [ref=e466] [cursor=pointer]:
+                        - generic "456 Oak Ave, Los Angeles, CA 90210" [ref=e467] [cursor=pointer]: 456 Oak Ave, Los An...
+                      - cell "michael.chen@email.com" [ref=e468] [cursor=pointer]:
+                        - img [ref=e470] [cursor=pointer]
+                      - cell "+1-555-0124" [ref=e474] [cursor=pointer]:
+                        - img [ref=e476] [cursor=pointer]
+                      - cell [ref=e479] [cursor=pointer]:
+                        - button [ref=e480] [cursor=pointer]:
+                          - img [ref=e481] [cursor=pointer]
+                    - link "View details for Sarah Johnson" [ref=e485] [cursor=pointer]:
+                      - /url: /dashboard/customers/1
+                      - cell [ref=e486] [cursor=pointer]:
+                        - checkbox [ref=e487]
+                      - 'cell "Sarah Johnson Sarah Johnson ID: 1" [ref=e488] [cursor=pointer]':
+                        - generic [ref=e489] [cursor=pointer]:
+                          - img "Sarah Johnson" [ref=e491] [cursor=pointer]
+                          - generic [ref=e492] [cursor=pointer]:
+                            - generic [ref=e493] [cursor=pointer]: Sarah Johnson
+                            - 'generic "Full ID: 1" [ref=e494] [cursor=pointer]': "ID: 1"
+                      - cell "Johnson & Associates" [ref=e495] [cursor=pointer]
+                      - cell "123 Main St, New Yo..." [ref=e497] [cursor=pointer]:
+                        - generic "123 Main St, New York, NY 10001" [ref=e498] [cursor=pointer]: 123 Main St, New Yo...
+                      - cell "sarah.johnson@email.com" [ref=e499] [cursor=pointer]:
+                        - img [ref=e501] [cursor=pointer]
+                      - cell "+1-555-0123" [ref=e505] [cursor=pointer]:
+                        - img [ref=e507] [cursor=pointer]
+                      - cell [ref=e510] [cursor=pointer]:
+                        - button [ref=e511] [cursor=pointer]:
+                          - img [ref=e512] [cursor=pointer]
+  - generic [ref=e516]:
+    - generic [ref=e517]:
+      - generic [ref=e518]: Gold
+      - generic [ref=e519]: $3341.86
+      - generic [ref=e520]:
+        - img [ref=e521]
+        - text: +0.64%
+    - generic [ref=e523]:
+      - generic [ref=e524]: Silver
+      - generic [ref=e525]: $35.33
+      - generic [ref=e526]:
+        - img [ref=e527]
+        - text: "-0.34%"
+    - generic [ref=e529]:
+      - generic [ref=e530]: Platinum
+      - generic [ref=e531]: $1368.40
+      - generic [ref=e532]:
+        - img [ref=e533]
+        - text: +0.96%
+    - generic [ref=e535]:
+      - button "Refresh prices" [ref=e536] [cursor=pointer]:
+        - img [ref=e537] [cursor=pointer]
+      - generic [ref=e542]: Just now
+  - button "Open Next.js Dev Tools" [ref=e548] [cursor=pointer]:
+    - img [ref=e549] [cursor=pointer]
+  - alert [ref=e552]
+```

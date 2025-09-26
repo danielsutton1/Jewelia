@@ -1,0 +1,18 @@
+node_modules/
+.next/
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sandbox-specific ignores
+.env.local
+.env.development
+.env.production
+*.log
+.DS_Store
+node_modules/
+.next/
+dist/
+build/

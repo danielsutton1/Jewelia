@@ -1,0 +1,862 @@
+"use client"
+
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { MessageSquare, Plus, Search, Bell, Users, Archive, AlertCircle, X, User, Clock, ArrowLeft, Send } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
+import { MessageList } from '@/components/internal-messages/MessageList'
+import { MessageComposer } from '@/components/internal-messages/MessageComposer'
+import { InternalMessage, CreateMessageRequest } from '@/lib/services/InternalMessagingService'
+import { internalMessagingFileService, MessageAttachment } from '@/lib/services/InternalMessagingFileService'
+
+interface User {
+  id: string
+  full_name: string
+  email: string
+  role: string
+  department?: string
+}
+
+interface Conversation {
+  id: string
+  participants: string[]
+  lastMessage: InternalMessage
+  unreadCount: number
+  messages: InternalMessage[]
+}
+
+export default function InternalMessagesPage() {
+  const [messages, setMessages] = useState<InternalMessage[]>([])
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterType, setFilterType] = useState('all')
+  const [showComposer, setShowComposer] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [replyTo, setReplyTo] = useState<{
+    messageId: string;
+    subject: string;
+    recipientId: string;
+    recipientName: string;
+    conversationId: string;
+  } | null>(null)
+  const [stats, setStats] = useState({
+    totalMessages: 0,
+    unreadCount: 0,
+    activeUsers: 0
+  })
+  
+  // New state for conversation view
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+  const [viewMode, setViewMode] = useState<'conversations' | 'conversation'>('conversations')
+  
+  // NEW: File attachment state
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  
+  // NEW: Message content state
+  const [messageContent, setMessageContent] = useState('')
+  
+  // NEW: Attachment viewer modal state
+  const [showAttachmentModal, setShowAttachmentModal] = useState(false)
+  const [currentAttachments, setCurrentAttachments] = useState<MessageAttachment[]>([])
+  
+  const { toast } = useToast()
+
+  // Fetch current user and messages on component mount
+  useEffect(() => {
+    fetchCurrentUser()
+    fetchUsers()
+  }, [])
+
+  useEffect(() => {
+    if (currentUserId) {
+      fetchMessages()
+    }
+  }, [currentUserId, filterType, searchTerm])
+
+  // Group messages into conversations
+  useEffect(() => {
+    if (messages.length > 0 && currentUserId) {
+      groupMessagesIntoConversations()
+    }
+  }, [messages, currentUserId])
+
+  const fetchCurrentUser = async () => {
+    try {
+      // TEMPORARY: Use hardcoded test user for testing
+      setCurrentUserId('fdb2a122-d6ae-4e78-b277-3317e1a09132')
+      
+      // ORIGINAL CODE (commented out for testing):
+      // const response = await fetch('/api/auth/me')
+      // if (response.ok) {
+      //   const data = await response.json()
+      //   if (data.success) {
+      //     setCurrentUserId(data.user.id)
+      //   }
+      // }
+    } catch (error) {
+      console.error('Error fetching current user:', error)
+    }
+  }
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users')
+      if (response.ok) {
+        const data = await response.json()
+        setUsers(data.users || [])
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    }
+  }
+
+  const fetchMessages = async () => {
+    if (!currentUserId) return
+    
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/internal-messages?sender_id=${currentUserId}`)
+      if (response.ok) {
+        const data = await response.json()
+        setMessages(data.messages || [])
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+      setError('Failed to fetch messages')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const groupMessagesIntoConversations = () => {
+    if (!currentUserId || messages.length === 0) return
+
+    const conversationMap = new Map<string, Conversation>()
+    
+    messages.forEach(message => {
+      // Create a unique conversation ID based on participants
+      const participants = [message.sender_id, message.recipient_id].sort()
+      const conversationId = participants.join('-')
+      
+      if (!conversationMap.has(conversationId)) {
+        conversationMap.set(conversationId, {
+          id: conversationId,
+          participants: participants,
+          lastMessage: message,
+          unreadCount: 0,
+          messages: []
+        })
+      }
+      
+      const conversation = conversationMap.get(conversationId)!
+      conversation.messages.push(message)
+      
+      // Update last message if this one is newer
+      if (new Date(message.created_at) > new Date(conversation.lastMessage.created_at)) {
+        conversation.lastMessage = message
+      }
+      
+      // Count unread messages
+      if (message.recipient_id === currentUserId && message.status === 'unread') {
+        conversation.unreadCount++
+      }
+    })
+    
+    setConversations(Array.from(conversationMap.values()))
+  }
+
+  const handleSendMessage = async (messageData: CreateMessageRequest): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/internal-messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(messageData)
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
+
+      const data = await response.json()
+      if (data.success) {
+        toast({
+          title: "Message Sent",
+          description: "Your internal message has been sent successfully.",
+        })
+        
+        // Refresh messages
+        await fetchMessages()
+        // Clear reply data
+        setReplyTo(null)
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error('Error sending message:', error)
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      })
+      return false
+    }
+  }
+
+  // Handle reply to message within conversation
+  const handleReply = (message: InternalMessage, conversation: Conversation) => {
+    // For replies, we reply to the person who sent us the message
+    let recipientId: string;
+    let recipientName: string;
+    
+    if (message.sender_id === currentUserId) {
+      // We sent this message, so reply to the recipient
+      recipientId = message.recipient_id;
+      recipientName = message.recipient_name || 'Unknown';
+    } else {
+      // We received this message, so reply to the sender
+      recipientId = message.sender_id;
+      recipientName = message.sender_name || 'Unknown';
+    }
+    
+    setReplyTo({
+      messageId: message.id,
+      subject: `Re: ${message.subject}`,
+      recipientId: recipientId,
+      recipientName: recipientName,
+      conversationId: conversation.id
+    });
+    
+    // Open composer within conversation view
+    setShowComposer(true);
+  };
+
+  // Open conversation view
+  const openConversation = (conversation: Conversation) => {
+    setSelectedConversation(conversation)
+    setViewMode('conversation')
+  }
+
+  // Go back to conversations list
+  const goBackToConversations = () => {
+    setSelectedConversation(null)
+    setViewMode('conversations')
+    setShowComposer(false)
+    setReplyTo(null)
+    setMessageContent('')
+    setSelectedFiles([])
+  }
+
+  // NEW: Handle file selection (both drag & drop and file picker)
+  const handleFileSelection = (files: File[]) => {
+    // Filter out files that are already selected
+    const newFiles = files.filter(file => 
+      !selectedFiles.some(existingFile => 
+        existingFile.name === file.name && existingFile.size === file.size
+      )
+    )
+    
+    if (newFiles.length > 0) {
+      setSelectedFiles(prev => [...prev, ...newFiles])
+      toast({
+        title: "Files Added",
+        description: `${newFiles.length} file(s) added successfully.`,
+      })
+    }
+  }
+
+  // NEW: Remove file from selection
+  const removeFile = (fileToRemove: File) => {
+    setSelectedFiles(prev => prev.filter(file => file !== fileToRemove))
+  }
+
+  // NEW: Format file size
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  }
+
+  // NEW: Handle viewing attachments - FIXED VERSION WITH MODAL
+  const handleViewAttachments = (attachments: any[]) => {
+    if (attachments.length === 0) return
+    
+    console.log('Opening attachment viewer for:', attachments)
+    setCurrentAttachments(attachments)
+    setShowAttachmentModal(true)
+  }
+
+  // NEW: Handle downloading attachments - FIXED VERSION
+  const handleDownloadAttachment = async (attachment: MessageAttachment) => {
+    console.log('Downloading attachment:', attachment)
+    
+    try {
+      // Use the real file service to download the actual file
+      await internalMessagingFileService.downloadFile(attachment.file_path, attachment.file_name)
+      
+      toast({
+        title: "Download Complete",
+        description: `${attachment.file_name} has been downloaded successfully!`,
+      })
+    } catch (error) {
+      console.error('Error downloading attachment:', error)
+      toast({
+        title: "Download Error",
+        description: "Failed to download the file. Please try again.",
+        variant: "destructive"
+      })
+    }
+  }
+
+  // NEW: Handle viewing attachments - FIXED VERSION
+  const handleViewAttachment = async (attachment: MessageAttachment) => {
+    console.log('Viewing attachment:', attachment)
+    
+    try {
+      if (attachment.mime_type?.startsWith('image/')) {
+        // For images, get the actual preview URL from Supabase
+        const previewUrl = internalMessagingFileService.getFilePreviewUrl(attachment.file_path)
+        window.open(previewUrl, '_blank')
+      } else if (attachment.mime_type?.includes('pdf')) {
+        // For PDFs, get the preview URL
+        const previewUrl = internalMessagingFileService.getFilePreviewUrl(attachment.file_path)
+        window.open(previewUrl, '_blank')
+      } else {
+        // For other file types, show file info
+        toast({
+          title: "File Viewer",
+          description: `File: ${attachment.file_name}\nType: ${attachment.mime_type}\nSize: ${attachment.file_size ? formatFileSize(attachment.file_size) : 'Unknown'}`,
+          duration: 5000,
+        })
+      }
+    } catch (error) {
+      console.error('Error viewing attachment:', error)
+      toast({
+        title: "Error",
+        description: "Failed to view file. Please try downloading it instead.",
+        variant: "destructive"
+      })
+    }
+  }
+
+  // NEW: Handle sending message from conversation view with PROPER FILE UPLOAD
+  const handleSendMessageFromConversation = async () => {
+    if (!messageContent.trim() && selectedFiles.length === 0) {
+      toast({
+        title: "No Content",
+        description: "Please add a message or attach files before sending.",
+        variant: "destructive"
+      })
+      return
+    }
+
+    try {
+      // Step 1: Upload files to Supabase Storage first
+      let uploadedAttachments: any[] = []
+      
+      if (selectedFiles.length > 0) {
+        console.log('📤 Uploading files to Supabase Storage...')
+        
+        for (const file of selectedFiles) {
+          try {
+            // Upload file using the file service
+            const uploadResult = await internalMessagingFileService.uploadFile(
+              file,
+              `temp-${Date.now()}-${file.name}`, // Temporary message ID
+              currentUserId! // Current user ID
+            )
+            
+            if (uploadResult) {
+              uploadedAttachments.push({
+                file_name: uploadResult.file_name,
+                file_path: uploadResult.file_path,
+                file_size: uploadResult.file_size,
+                mime_type: uploadResult.mime_type,
+                file_type: uploadResult.file_type
+              })
+              console.log('✅ File uploaded:', file.name)
+            } else {
+              throw new Error(`Failed to upload ${file.name}`)
+            }
+          } catch (uploadError) {
+            console.error('❌ File upload failed:', uploadError)
+            toast({
+              title: "Upload Error",
+              description: `Failed to upload ${file.name}. Please try again.`,
+              variant: "destructive"
+            })
+            return
+          }
+        }
+        
+        console.log('📁 All files uploaded successfully:', uploadedAttachments)
+      }
+
+      // Step 2: Create message data with uploaded file information
+      const messageData: CreateMessageRequest = {
+        recipient_id: selectedConversation!.participants.find(id => id !== currentUserId)!,
+        subject: selectedConversation!.lastMessage.subject,
+        content: messageContent.trim() || 'Message with attachments',
+        message_type: 'general' as const,
+        priority: 'normal' as const,
+        // Include the uploaded file information
+        attachments: uploadedAttachments
+      }
+
+      // Step 3: Send the message
+      const success = await handleSendMessage(messageData)
+      
+      if (success) {
+        // Create a new message object to add to the conversation immediately
+        const newMessage: InternalMessage = {
+          id: `temp-${Date.now()}`, // Temporary ID
+          sender_id: currentUserId!,
+          recipient_id: messageData.recipient_id,
+          subject: messageData.subject,
+          content: messageData.content,
+          message_type: messageData.message_type,
+          priority: messageData.priority,
+          status: 'read',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          sender_name: 'You',
+          recipient_name: users.find(u => u.id === messageData.recipient_id)?.full_name || 'Unknown',
+          attachments: uploadedAttachments
+        }
+
+        // Add the new message to the selected conversation
+        setSelectedConversation(prev => {
+          if (!prev) return prev
+          return {
+            ...prev,
+            messages: [...prev.messages, newMessage],
+            lastMessage: newMessage
+          }
+        })
+
+        // Clear the form
+        setMessageContent('')
+        setSelectedFiles([])
+        
+        // Refresh messages to get the real message from the server
+        await fetchMessages()
+        
+        toast({
+          title: "Message Sent",
+          description: "Your message has been sent successfully!",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      console.error('Error sending message with attachments:', error)
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      })
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading internal messages...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Messages</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
+      </div>
+    )
+  }
+
+  // Show conversation view
+  if (viewMode === 'conversation' && selectedConversation) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+          {/* Conversation Header */}
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={goBackToConversations}
+                  className="flex items-center space-x-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Back to Conversations</span>
+                </Button>
+              </div>
+              <div className="text-right">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                  {selectedConversation.participants
+                    .filter(id => id !== currentUserId)
+                    .map(id => users.find(u => u.id === id)?.full_name || 'Unknown')
+                    .join(', ')}
+                </h1>
+                <p className="text-sm text-gray-600">
+                  {selectedConversation.messages.length} messages
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="space-y-4 mb-6">
+            {selectedConversation.messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender_id === currentUserId ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-xs sm:max-w-md lg:max-w-lg px-4 py-2 rounded-lg ${
+                    message.sender_id === currentUserId
+                      ? 'bg-green-500 text-white'
+                      : 'bg-white text-gray-900 border border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="font-semibold text-sm">
+                      {message.sender_id === currentUserId ? 'You' : message.sender_name || 'Unknown'}
+                    </span>
+                    <span className="text-xs opacity-75">
+                      {new Date(message.created_at).toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
+                    </span>
+                  </div>
+                  
+                  <p className="text-sm">{message.content}</p>
+                  
+                  {/* Show attachments if any */}
+                  {message.attachments && message.attachments.length > 0 && (
+                    <div className="mt-2">
+                      <button
+                        onClick={() => handleViewAttachments(message.attachments)}
+                        className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200 transition-colors"
+                      >
+                        📎 {message.attachments.length} attachment(s)
+                      </button>
+                    </div>
+                  )}
+                  
+                  {/* Reply button */}
+                  <div className="mt-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleReply(message, selectedConversation)}
+                      className="text-xs h-6 px-2"
+                    >
+                      Reply
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Reply Section */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <div className="space-y-4">
+              {/* File Upload Area */}
+              {selectedFiles.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">Selected Files:</p>
+                  {selectedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-600">{file.name}</span>
+                        <span className="text-xs text-gray-500">({formatFileSize(file.size)})</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFile(file)}
+                        className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* File Input */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || [])
+                    handleFileSelection(files)
+                  }}
+                  className="hidden"
+                  id="file-input-conversation"
+                />
+                <label
+                  htmlFor="file-input-conversation"
+                  className="cursor-pointer block"
+                >
+                  <div className="text-gray-600">
+                    <p className="text-sm">Drag & drop files here or click to browse files</p>
+                    <p className="text-xs mt-1">Supports: PDF, DOC, TXT, Images, ZIP</p>
+                  </div>
+                  {selectedFiles.length === 0 && (
+                    <p className="text-xs text-gray-500 mt-2">
+                      No files attached. Drag & drop or click to attach documents, images, or other files.
+                    </p>
+                  )}
+                </label>
+              </div>
+
+              {/* Message Input */}
+              <div className="flex space-x-2">
+                <Input
+                  placeholder="Type your message..."
+                  value={messageContent}
+                  onChange={(e) => setMessageContent(e.target.value)}
+                  className="flex-1"
+                />
+                <Button 
+                  onClick={handleSendMessageFromConversation}
+                  className="bg-green-500 hover:bg-green-600"
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  Send Message
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Attachment Viewer Modal */}
+        {showAttachmentModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">
+                  Attachments ({currentAttachments.length})
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAttachmentModal(false)}
+                  className="h-8 w-8 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                {currentAttachments.map((attachment, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">📎</span>
+                      <div>
+                        <p className="font-medium text-sm">{attachment.file_name}</p>
+                        <p className="text-xs text-gray-500">
+                          {attachment.file_size ? formatFileSize(attachment.file_size) : 'Unknown size'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewAttachment(attachment)}
+                        className="text-xs h-8 px-3"
+                      >
+                        View
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDownloadAttachment(attachment)}
+                        className="text-xs h-8 px-3"
+                      >
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        {/* Header */}
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Internal Messages</h1>
+              <p className="text-gray-600 mt-2">Communicate with your team members</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={() => setShowComposer(true)}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                New Message
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <MessageSquare className="h-5 w-5 text-blue-600" />
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Messages</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalMessages}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <Bell className="h-5 w-5 text-yellow-600" />
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Unread</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.unreadCount}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <Users className="h-5 w-5 text-green-600" />
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Active Users</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.activeUsers}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Conversations List */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Conversations Sidebar */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <MessageSquare className="h-5 w-5" />
+                  <span>Conversations</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {conversations.map((conversation) => (
+                    <div
+                      key={conversation.id}
+                      onClick={() => openConversation(conversation)}
+                      className="p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm">
+                          {conversation.participants
+                            .filter(id => id !== currentUserId)
+                            .map(id => users.find(u => u.id === id)?.full_name || 'Unknown')
+                            .join(', ')}
+                        </h4>
+                        {conversation.unreadCount > 0 && (
+                          <Badge variant="destructive" className="text-xs">
+                            {conversation.unreadCount}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 truncate">
+                        {conversation.lastMessage.content}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(conversation.lastMessage.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Messages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {messages.length === 0 ? (
+                  <div className="text-center py-8">
+                    <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">No messages yet. Start a conversation!</p>
+                  </div>
+                ) : (
+                  <MessageList
+                    messages={messages}
+                    currentUserId={currentUserId}
+                    onReply={handleReply}
+                    onSendMessage={handleSendMessage}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Message Composer Modal */}
+        {showComposer && (
+          <MessageComposer
+            users={users}
+            onSend={handleSendMessage}
+            onClose={() => setShowComposer(false)}
+            replyTo={replyTo}
+          />
+        )}
+      </div>
+    </div>
+  )
+}

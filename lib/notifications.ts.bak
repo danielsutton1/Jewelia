@@ -1,0 +1,125 @@
+import { createClient } from '@supabase/supabase-js'
+import ical from 'ical-generator'
+import { format } from 'date-fns'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+interface NotificationData {
+  type: 'meeting' | 'brief' | 'system'
+  title: string
+  message: string
+  data?: Record<string, any>
+}
+
+interface MeetingData {
+  title: string
+  startTime: Date
+  duration: number
+  joinUrl: string
+  organizer: string
+  attendees: string[]
+}
+
+// Generate .ics file for calendar invites
+export function generateICSFile(meetingData: MeetingData): string {
+  const calendar = ical({ name: 'Meeting Invitation' })
+  
+  calendar.createEvent({
+    start: meetingData.startTime,
+    end: new Date(meetingData.startTime.getTime() + meetingData.duration * 60000),
+    summary: meetingData.title,
+    description: `Join meeting: ${meetingData.joinUrl}`,
+    organizer: { name: meetingData.organizer, email: meetingData.organizer },
+    attendees: meetingData.attendees.map(email => ({ email, rsvp: true })),
+    url: meetingData.joinUrl,
+  })
+
+  return calendar.toString()
+}
+
+// Send email notification using Supabase
+export async function sendEmailNotification(
+  to: string[],
+  subject: string,
+  html: string,
+  icsContent?: string
+) {
+  const { error } = await supabase.functions.invoke('send-email', {
+    body: {
+      to,
+      subject,
+      html,
+      attachments: icsContent ? [{
+        filename: 'invite.ics',
+        content: icsContent,
+        contentType: 'text/calendar',
+      }] : undefined,
+    },
+  })
+
+  if (error) {
+    console.error('Failed to send email:', error)
+    throw error
+  }
+}
+
+// Create in-app notification
+export async function createNotification(
+  userId: string,
+  data: NotificationData
+) {
+  const { error } = await supabase
+    .from('notifications')
+    .insert({
+      user_id: userId,
+      type: data.type,
+      title: data.title,
+      message: data.message,
+      data: data.data,
+    })
+
+  if (error) {
+    console.error('Failed to create notification:', error)
+    throw error
+  }
+}
+
+// Get user's notifications
+export async function getUserNotifications(userId: string) {
+  const { data, error } = await supabase
+    .from('notifications')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Failed to fetch notifications:', error)
+    throw error
+  }
+
+  return data
+}
+
+// Mark notification as read
+export async function markNotificationAsRead(notificationId: string) {
+  const { error } = await supabase
+    .from('notifications')
+    .update({ read: true })
+    .eq('id', notificationId)
+
+  if (error) {
+    console.error('Failed to mark notification as read:', error)
+    throw error
+  }
+}
+
+// Example usage:
+// await notifyStaff({
+//   type: 'trade_in',
+//   action: 'created',
+//   data: { id: 'TI-123', customer: 'John Doe' },
+//   priority: 'high'
+// }) 

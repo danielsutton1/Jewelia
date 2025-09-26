@@ -1,0 +1,496 @@
+{
+  "passed": 93,
+  "failed": 5,
+  "tests": [
+    {
+      "name": "Users table exists",
+      "passed": false,
+      "message": "relation \"public.information_schema.columns\" does not exist"
+    },
+    {
+      "name": "RLS check for users",
+      "passed": false,
+      "message": "relation \"public.information_schema.tables\" does not exist"
+    },
+    {
+      "name": "RLS check for customers",
+      "passed": false,
+      "message": "relation \"public.information_schema.tables\" does not exist"
+    },
+    {
+      "name": "RLS check for orders",
+      "passed": false,
+      "message": "relation \"public.information_schema.tables\" does not exist"
+    },
+    {
+      "name": "RLS check for inventory",
+      "passed": false,
+      "message": "relation \"public.information_schema.tables\" does not exist"
+    },
+    {
+      "name": "API endpoint app/api/customers/route.ts exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "API endpoint app/api/orders/route.ts exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "API endpoint app/api/inventory/route.ts exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    admin.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    manager.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    sales.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    production.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    logistics.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canEditCustomers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canEditOrders",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canEditInventory",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canEditProduction",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewAnalytics",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canManageUsers",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canEditFinancials",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canViewReports",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "    viewer.canExportData",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Tenant isolation migration exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "UserContextService exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "TenantAwareInventoryService exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "EnhancedPermissionGuard component exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Auth provider exists",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Auth provider has updated permissions",
+      "passed": true,
+      "message": ""
+    }
+  ]
+}

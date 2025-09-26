@@ -1,0 +1,320 @@
+import type { PartnerProfile } from "../types/partner-profile"
+
+export const mockPartnerProfile: PartnerProfile = {
+  id: "partner-001",
+  name: "GoldCraft Suppliers",
+  logo: "/placeholder-aa5z5.png",
+  category: ["supplier-metals", "supplier-findings"],
+  specialties: ["gold", "silver", "platinum", "clasps", "settings"],
+  contactName: "Michael Johnson",
+  email: "info@goldcraftsuppliers.com",
+  phone: "+1 (555) 123-4567",
+  address: "123 Metalwork Lane, Jewelry District, NY 10001",
+  website: "https://www.goldcraftsuppliers.com",
+  rating: 4.8,
+  recentOrderCount: 24,
+  responseTime: 3, // hours
+  notes: "Premium supplier of high-quality metals and findings. Preferred partner for custom orders.",
+  createdAt: "2022-03-15T10:30:00Z",
+  updatedAt: "2023-11-20T14:45:00Z",
+
+  // Extended profile information
+  contactPersons: [
+    {
+      id: "cp-001",
+      name: "Michael Johnson",
+      position: "Account Manager",
+      email: "michael@goldcraftsuppliers.com",
+      phone: "+1 (555) 123-4567",
+      primaryContact: true,
+      avatar: "/placeholder-jymmf.png",
+    },
+    {
+      id: "cp-002",
+      name: "Sarah Williams",
+      position: "Sales Director",
+      email: "sarah@goldcraftsuppliers.com",
+      phone: "+1 (555) 123-4568",
+      primaryContact: false,
+      avatar: "/placeholder-ec3i3.png",
+    },
+    {
+      id: "cp-003",
+      name: "David Chen",
+      position: "Technical Support",
+      email: "david@goldcraftsuppliers.com",
+      phone: "+1 (555) 123-4569",
+      primaryContact: false,
+    },
+  ],
+
+  locations: [
+    {
+      id: "loc-001",
+      name: "Headquarters",
+      address: "123 Metalwork Lane",
+      city: "New York",
+      state: "NY",
+      postalCode: "10001",
+      country: "USA",
+      phone: "+1 (555) 123-4567",
+      email: "info@goldcraftsuppliers.com",
+      isPrimary: true,
+      coordinates: {
+        latitude: 40.7128,
+        longitude: -74.006,
+      },
+    },
+    {
+      id: "loc-002",
+      name: "West Coast Office",
+      address: "456 Golden Avenue",
+      city: "Los Angeles",
+      state: "CA",
+      postalCode: "90001",
+      country: "USA",
+      phone: "+1 (555) 987-6543",
+      email: "westcoast@goldcraftsuppliers.com",
+      isPrimary: false,
+      coordinates: {
+        latitude: 34.0522,
+        longitude: -118.2437,
+      },
+    },
+  ],
+
+  businessHours: {
+    monday: "9:00 AM - 5:00 PM",
+    tuesday: "9:00 AM - 5:00 PM",
+    wednesday: "9:00 AM - 5:00 PM",
+    thursday: "9:00 AM - 5:00 PM",
+    friday: "9:00 AM - 4:00 PM",
+    saturday: "10:00 AM - 2:00 PM",
+    sunday: "Closed",
+    notes: "Early appointments available upon request",
+  },
+
+  certifications: [
+    {
+      id: "cert-001",
+      name: "Responsible Jewelry Council",
+      issuingBody: "RJC",
+      dateIssued: "2021-05-10",
+      expiryDate: "2024-05-10",
+      documentUrl: "/documents/rjc-certification.pdf",
+    },
+    {
+      id: "cert-002",
+      name: "ISO 9001:2015",
+      issuingBody: "International Organization for Standardization",
+      dateIssued: "2022-01-15",
+      expiryDate: "2025-01-15",
+      documentUrl: "/documents/iso-certification.pdf",
+    },
+    {
+      id: "cert-003",
+      name: "Fairtrade Gold",
+      issuingBody: "Fairtrade International",
+      dateIssued: "2022-07-22",
+      expiryDate: "2024-07-22",
+      documentUrl: "/documents/fairtrade-certification.pdf",
+    },
+  ],
+
+  performanceMetrics: {
+    qualityRating: 4.8,
+    onTimeDelivery: 96.5,
+    priceCompetitiveness: 8.2,
+    communicationScore: 9.0,
+    issueResolution: 8.7,
+    averageResponseTime: 3.2,
+    lastReviewDate: "2023-10-15",
+  },
+
+  equipment: [
+    {
+      id: "equip-001",
+      name: "Precious Metal Refining System",
+      type: "Processing",
+      capabilities: "Gold, Silver, Platinum refining up to 99.99% purity",
+      quantity: 2,
+    },
+    {
+      id: "equip-002",
+      name: "CNC Milling Machine",
+      type: "Manufacturing",
+      capabilities: "Precision cutting and shaping of metal components",
+      quantity: 3,
+    },
+    {
+      id: "equip-003",
+      name: "Laser Welding System",
+      type: "Assembly",
+      capabilities: "Precision welding of fine components",
+      quantity: 2,
+    },
+    {
+      id: "equip-004",
+      name: "Metal Testing Laboratory",
+      type: "Quality Control",
+      capabilities: "Composition analysis, purity testing, stress testing",
+      quantity: 1,
+    },
+  ],
+
+  capacity: {
+    maxOrderSize: "500kg of processed metals per week",
+    leadTime: "3-5 business days for standard orders",
+    turnaroundTime: "24-48 hours for rush orders (subject to availability)",
+    availableHours: 50,
+    notes: "Custom orders may require additional lead time. Capacity increases available with advance notice.",
+  },
+
+  specialExpertise: [
+    "Recycled precious metals processing",
+    "Custom alloy development",
+    "Micro-component manufacturing",
+    "Sustainable sourcing practices",
+    "Hypoallergenic metal formulations",
+  ],
+
+  portfolio: [
+    {
+      id: "port-001",
+      title: "Custom 18K Rose Gold Alloy",
+      description: "Developed a custom rose gold alloy with enhanced durability for high-end watch components",
+      imageUrl: "/placeholder-30207.png",
+      date: "2023-06-12",
+    },
+    {
+      id: "port-002",
+      title: "Platinum Micro-Clasps",
+      description: "Precision-engineered micro-clasps for fine jewelry applications",
+      imageUrl: "/placeholder-ebs7q.png",
+      date: "2023-04-03",
+    },
+    {
+      id: "port-003",
+      title: "Sustainable Silver Collection",
+      description: "100% recycled silver components with traceable sourcing",
+      imageUrl: "/placeholder-jymmf.png",
+      date: "2022-11-18",
+    },
+  ],
+
+  pricingAgreements: [
+    {
+      id: "price-001",
+      title: "Annual Gold Supply Contract",
+      startDate: "2023-01-01",
+      endDate: "2023-12-31",
+      terms: "Fixed premium of 3% over spot price for 18K gold, minimum order 1kg",
+      documentUrl: "/documents/gold-contract-2023.pdf",
+    },
+    {
+      id: "price-002",
+      title: "Silver Components Agreement",
+      startDate: "2023-03-15",
+      endDate: "2024-03-14",
+      terms: "Tiered pricing based on monthly volume, starting at $28/oz",
+      documentUrl: "/documents/silver-agreement-2023.pdf",
+    },
+  ],
+
+  paymentTerms: {
+    method: "Net 30, Wire Transfer, Credit Card",
+    terms: "2% discount for payment within 10 days",
+    currency: "USD",
+    creditLimit: 50000,
+    discounts: "Volume discounts available for orders over $10,000",
+  },
+
+  orderHistory: [
+    {
+      id: "order-001",
+      orderNumber: "GC-2023-11-001",
+      date: "2023-11-05",
+      amount: 12450.75,
+      status: "completed",
+      items: 8,
+    },
+    {
+      id: "order-002",
+      orderNumber: "GC-2023-10-015",
+      date: "2023-10-22",
+      amount: 8320.5,
+      status: "completed",
+      items: 5,
+    },
+    {
+      id: "order-003",
+      orderNumber: "GC-2023-09-008",
+      date: "2023-09-14",
+      amount: 15780.25,
+      status: "completed",
+      items: 12,
+    },
+    {
+      id: "order-004",
+      orderNumber: "GC-2023-08-022",
+      date: "2023-08-30",
+      amount: 6540.0,
+      status: "completed",
+      items: 4,
+    },
+  ],
+
+  currentTasks: [
+    {
+      id: "task-001",
+      orderNumber: "GC-2023-11-012",
+      date: "2023-11-18",
+      amount: 9870.5,
+      status: "in-progress",
+      items: 6,
+    },
+    {
+      id: "task-002",
+      orderNumber: "GC-2023-11-014",
+      date: "2023-11-20",
+      amount: 4320.75,
+      status: "pending",
+      items: 3,
+    },
+  ],
+
+  documents: [
+    {
+      id: "doc-001",
+      title: "Master Service Agreement",
+      type: "Contract",
+      uploadDate: "2023-01-10",
+      fileUrl: "/documents/msa-goldcraft-2023.pdf",
+      fileSize: "1.2 MB",
+    },
+    {
+      id: "doc-002",
+      title: "Material Safety Data Sheet - Gold Alloys",
+      type: "Compliance",
+      uploadDate: "2023-02-15",
+      fileUrl: "/documents/msds-gold-alloys.pdf",
+      fileSize: "850 KB",
+    },
+    {
+      id: "doc-003",
+      title: "Quality Assurance Procedures",
+      type: "Compliance",
+      uploadDate: "2023-03-22",
+      fileUrl: "/documents/qa-procedures.pdf",
+      fileSize: "1.8 MB",
+    },
+    {
+      id: "doc-004",
+      title: "2023 Product Catalog",
+      type: "Marketing",
+      uploadDate: "2023-01-05",
+      fileUrl: "/documents/product-catalog-2023.pdf",
+      fileSize: "4.5 MB",
+    },
+  ],
+}
